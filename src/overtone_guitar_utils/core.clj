@@ -1,6 +1,7 @@
 (ns overtone-guitar-utils.core
   (:require [overtone.music.pitch :refer [note ]]
-            [overtone.synth.stringed :refer [guitar-string-notes guitar-chord-frets]]))
+            [overtone.synth.stringed :refer [guitar-string-notes guitar-chord-frets]]
+            [clojure.string :as str]))
 
 (defn foo
   "I don't do a whole lot."
@@ -36,8 +37,10 @@
              :else [-1 -1 -1 -1 -1 -1])
         fret-count (first (reverse (sort  ch)))
         string-printer (fn [fret]
-                         (apply concat (for [f (range fret-count)]
-                                         (if (= fret (inc f))
-                                           "|--x--"
-                                           "|-----"))))]
-    (map string-printer ch)))
+                         (str/join (for [f (range fret-count)]
+                                     (if (= fret (inc f))
+                                       "|--x--"
+                                       "|-----"))))
+        res (str/join "\n" (map string-printer (reverse ch)))]
+    (println res)
+    res))
